@@ -1,0 +1,21 @@
+{
+  "name": "copy-s3-bucket-uploads",
+  "version": "1.0.0",
+  "description": "",
+  "main": "copyFileFromS3.js",
+  "dependencies": {
+    "async": "^2.0.0-rc.4"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:dmuth/test-copy-s3-bucket-uploads.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
