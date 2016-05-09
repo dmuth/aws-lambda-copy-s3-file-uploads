@@ -2,4 +2,8 @@
 # Vim
 *.swp
 
+#
+# Ignore dist/ dir
+#
+dist/
 
