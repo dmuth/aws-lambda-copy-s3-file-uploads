@@ -19,10 +19,43 @@ gulp.task("zip", function() {
 });
 
 
+gulp.task("delete", function(cb) {
+
+	var cmd = "aws lambda delete-function "
+		+ "--region us-east-1 "
+		+ "--function-name copyFileFromS3 "
+		+ "--profile lambda-test "
+		;
+	//console.log("CMD", cmd); // Debugging
+
+	console.log("About to delete our function.  Don't worry if this throws an error.");
+
+	exec(cmd, function (error, stdout, stderr) {
+
+		if (stdout) {
+			console.log(stdout);
+		}
+
+		if (stderr) {
+			console.log(stderr);
+		}
+
+		if (error) {
+			//console.log(error); // Debugging
+		}
+
+		cb();
+
+	});
+
+
+});
+
+
 //
 // Upload our zipfile
 //
-gulp.task("upload", function(cb) {
+gulp.task("upload", ["delete"], function(cb) {
 
 	var cmd = "aws lambda create-function "
 		+ "--region us-east-1 "
@@ -33,13 +66,26 @@ gulp.task("upload", function(cb) {
 		+ "--runtime nodejs4.3 "
 		+ "--profile lambda-test "
 		+ "--timeout 10 "
-		+ "--memory-size 1024";
+		+ "--memory-size 1024"
+		;
 	//console.log("CMD", cmd); // Debugging
 
-	exec(cmd, function (err, stdout, stderr) {
-		console.log("STDOUT", stdout);
-		console.log("STDERR", stderr);
-		cb(err);
+	exec(cmd, function (error, stdout, stderr) {
+
+		if (stdout) {
+			console.log(stdout);
+		}
+
+		if (stderr) {
+			console.log(stderr);
+		}
+
+		if (error) {
+			console.log(error); // Debugging
+		}
+
+		cb(error);
+
 	});
 
 
