@@ -81,7 +81,7 @@ gulp.task("upload", ["delete"], function(cb) {
 		}
 
 		if (error) {
-			console.log(error); // Debugging
+			//console.log(error); // Debugging
 		}
 
 		cb(error);
@@ -92,4 +92,39 @@ gulp.task("upload", ["delete"], function(cb) {
 });
 
 
+//
+// Test our function out
+//
+gulp.task("test", function(cb) {
+
+	var cmd = "aws lambda invoke "
+		+ "--invocation-type RequestResponse "
+		+ "--function-name copyFileFromS3 "
+		+ "--region us-east-1 "
+		+ "--payload file://test/input.txt "
+		+ "--profile lambda-test "
+		+ "output.txt"
+		;
+	console.log("CMD", cmd); // Debugging
+
+	exec(cmd, function (error, stdout, stderr) {
+
+		if (stdout) {
+			console.log(stdout);
+		}
+
+		if (stderr) {
+			console.log(stderr);
+		}
+
+		if (error) {
+			//console.log(error); // Debugging
+		}
+
+		cb(error);
+
+	});
+
+
+});
 
