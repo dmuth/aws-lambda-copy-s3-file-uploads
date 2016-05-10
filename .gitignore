@@ -7,3 +7,8 @@
 #
 dist/
 
+#
+# Ignore testing results
+#
+output.txt
+
