@@ -1,10 +1,16 @@
-// dependencies
+/**
+* This script will run as an AWS Lambda function and should be fired when 
+*/
+
+//
+// Load our required modules
+//
 var async = require('async');
 var AWS = require('aws-sdk');
 var util = require('util');
 
 
-// get reference to S3 client 
+// Create our S3 client. No credentials will be necessary as this code will run under a role.
 var s3 = new AWS.S3();
  
 
@@ -14,7 +20,7 @@ exports.handler = function(event, context, cb) {
     
 	var srcBucket = event.Records[0].s3.bucket.name;
 	var srcKey    = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, " "));  
-	var dstBucket = "aws-lambda-copy-s3-uploads-backups";
+	var dstBucket = "dmuth-test-dest";
 	var dstKey    = srcKey;
 
 	if (srcBucket == dstBucket) {
@@ -26,11 +32,12 @@ exports.handler = function(event, context, cb) {
 	async.waterfall([
 
 		function download(cb2) {
+
 			s3.getObject({
 				Bucket: srcBucket,
 				Key: srcKey
-				},
-				cb2);
+				}, cb2);
+
 		},
 
 		function upload(response, cb2) {
@@ -48,7 +55,7 @@ exports.handler = function(event, context, cb) {
 		var dest = dstBucket + "/" + dstKey;
 
 		if (error) {
-			console.error(util.format("Unable to copy %s to %s", src, dest));
+			console.error(util.format("Unable to copy %s to %s. Error: %s", src, dest, error));
 
 		} else {
 			console.log(util.format("Successfully copied %s to %s", src, dest));
