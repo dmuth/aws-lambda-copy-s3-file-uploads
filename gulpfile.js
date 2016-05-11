@@ -6,6 +6,32 @@ var gulp = require("gulp");
 var zip = require("gulp-zip");
 
 
+/**
+* Wrapper to run a command.
+*/
+function runCmd(cmd, cb) {
+
+	exec(cmd, function (error, stdout, stderr) {
+
+		if (stdout) {
+			console.log(stdout);
+		}
+
+		if (stderr) {
+			console.log(stderr);
+		}
+
+		if (error) {
+			//console.log(error); // Debugging
+		}
+
+		cb(error);
+
+	});
+
+} // End of runCmd()
+
+
 //
 // Zip up our code and modules.
 //
@@ -30,22 +56,8 @@ gulp.task("delete", function(cb) {
 
 	console.log("About to delete our function.  Don't worry if this throws an error.");
 
-	exec(cmd, function (error, stdout, stderr) {
-
-		if (stdout) {
-			console.log(stdout);
-		}
-
-		if (stderr) {
-			console.log(stderr);
-		}
-
-		if (error) {
-			//console.log(error); // Debugging
-		}
-
-		cb();
-
+	runCmd(cmd, function(error) {
+		cb(error);
 	});
 
 
@@ -70,22 +82,8 @@ gulp.task("upload", ["zip", "delete"], function(cb) {
 		;
 	//console.log("CMD", cmd); // Debugging
 
-	exec(cmd, function (error, stdout, stderr) {
-
-		if (stdout) {
-			console.log(stdout);
-		}
-
-		if (stderr) {
-			console.log(stderr);
-		}
-
-		if (error) {
-			//console.log(error); // Debugging
-		}
-
+	runCmd(cmd, function(error) {
 		cb(error);
-
 	});
 
 
@@ -109,22 +107,8 @@ gulp.task("test", function(cb) {
 		;
 	//console.log("CMD", cmd); // Debugging
 
-	exec(cmd, function (error, stdout, stderr) {
-
-		if (stdout) {
-			console.log(stdout);
-		}
-
-		if (stderr) {
-			console.log(stderr);
-		}
-
-		if (error) {
-			//console.log(error); // Debugging
-		}
-
+	runCmd(cmd, function(error) {
 		cb(error);
-
 	});
 
 
@@ -141,24 +125,9 @@ gulp.task("remove-permission", function(cb) {
 		;
 	//console.log("CMD", cmd); // Debugging
 
-	exec(cmd, function (error, stdout, stderr) {
-
-		if (stdout) {
-			console.log(stdout);
-		}
-
-		if (stderr) {
-			console.log(stderr);
-		}
-
-		if (error) {
-			//console.log(error); // Debugging
-		}
-
+	runCmd(cmd, function(error) {
 		cb();
-
 	});
-
 
 });
 
@@ -180,26 +149,11 @@ gulp.task("add-permission", ["remove-permission"], function(cb) {
 		;
 	//console.log("CMD", cmd); // Debugging
 
-	exec(cmd, function (error, stdout, stderr) {
-
-		if (stdout) {
-			console.log(stdout);
-		}
-
-		if (stderr) {
-			console.log(stderr);
-		}
-
-		if (error) {
-			//console.log(error); // Debugging
-		}
-
+	runCmd(cmd, function(error) {
 		cb(error);
-
 	});
 
 });
-
 
 
 
