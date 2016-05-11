@@ -130,3 +130,76 @@ gulp.task("test", function(cb) {
 
 });
 
+
+
+gulp.task("remove-permission", function(cb) {
+
+	var cmd = "aws lambda remove-permission "
+		+ "--profile lambda-test "
+		+ "--function-name copyFileFromS3 "
+		+ "--statement-id lambda-permission-s3-test123 "
+		;
+	//console.log("CMD", cmd); // Debugging
+
+	exec(cmd, function (error, stdout, stderr) {
+
+		if (stdout) {
+			console.log(stdout);
+		}
+
+		if (stderr) {
+			console.log(stderr);
+		}
+
+		if (error) {
+			//console.log(error); // Debugging
+		}
+
+		cb();
+
+	});
+
+
+});
+
+
+//
+// Add permissions to our Lambda function
+//
+gulp.task("add-permission", ["remove-permission"], function(cb) {
+
+	var cmd = "aws lambda add-permission "
+		+ "--function-name copyFileFromS3 "
+		+ "--region us-east-1 "
+		+ "--statement-id lambda-permission-s3-test123 "
+		+ "--action \"lambda:InvokeFunction\" "
+		+ "--principal s3.amazonaws.com "
+		+ "--source-arn arn:aws:s3:::dmuth-test-src "
+		+ "--source-account 287061943401 "
+		+ "--profile lambda-test "
+		;
+	//console.log("CMD", cmd); // Debugging
+
+	exec(cmd, function (error, stdout, stderr) {
+
+		if (stdout) {
+			console.log(stdout);
+		}
+
+		if (stderr) {
+			console.log(stderr);
+		}
+
+		if (error) {
+			//console.log(error); // Debugging
+		}
+
+		cb(error);
+
+	});
+
+});
+
+
+
+
