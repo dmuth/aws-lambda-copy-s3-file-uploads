@@ -55,7 +55,7 @@ gulp.task("delete", function(cb) {
 //
 // Upload our zipfile
 //
-gulp.task("upload", ["delete"], function(cb) {
+gulp.task("upload", ["zip", "delete"], function(cb) {
 
 	var cmd = "aws lambda create-function "
 		+ "--region us-east-1 "
@@ -98,14 +98,16 @@ gulp.task("upload", ["delete"], function(cb) {
 gulp.task("test", function(cb) {
 
 	var cmd = "aws lambda invoke "
-		+ "--invocation-type RequestResponse "
+		//+ "--invocation-type RequestResponse "
+		+ "--invocation-type Event "
 		+ "--function-name copyFileFromS3 "
 		+ "--region us-east-1 "
+		//+ "--role arn:aws:iam::287061943401:role/lamba-execute "
 		+ "--payload file://test/input.txt "
 		+ "--profile lambda-test "
 		+ "output.txt"
 		;
-	console.log("CMD", cmd); // Debugging
+	//console.log("CMD", cmd); // Debugging
 
 	exec(cmd, function (error, stdout, stderr) {
 
