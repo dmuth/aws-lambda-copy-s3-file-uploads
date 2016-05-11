@@ -156,4 +156,23 @@ gulp.task("add-permission", ["remove-permission"], function(cb) {
 });
 
 
+//
+// Add permissions to our Lambda function
+//
+gulp.task("get-policy", function(cb) {
+
+	var cmd = "aws lambda get-policy "
+		+ "--function-name copyFileFromS3 "
+		+ "--profile lambda-test "
+		;
+	//console.log("CMD", cmd); // Debugging
+
+	runCmd(cmd, function(error) {
+		cb(error);
+	});
+
+});
+
+
+
 
