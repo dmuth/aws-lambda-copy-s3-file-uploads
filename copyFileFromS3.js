@@ -28,10 +28,17 @@ exports.handler = function(event, context, cb) {
 		return;
 	}
 
+	//
 	// Download the image from S3, upload to a different S3 bucket.
+	//
+	var src = srcBucket + "/" + srcKey;
+	var dest = dstBucket + "/" + dstKey;
+
 	async.waterfall([
 
 		function download(cb2) {
+
+			console.log("About to copy source file:", src);
 
 			s3.getObject({
 				Bucket: srcBucket,
@@ -41,18 +48,19 @@ exports.handler = function(event, context, cb) {
 		},
 
 		function upload(response, cb2) {
+
+			console.log("Successfully grabbed source file! About to write dest file:", dest);
+
 			s3.putObject({
 				Bucket: dstBucket,
 				Key: dstKey,
 				Body: response.Body,
 				ContentType: response.ContentType
 			}, cb2);
+
 		}
 
 	], function (error) {
-
-		var src = srcBucket + "/" + srcKey;
-		var dest = dstBucket + "/" + dstKey;
 
 		if (error) {
 			console.error(util.format("Unable to copy %s to %s. Error: %s", src, dest, error));
