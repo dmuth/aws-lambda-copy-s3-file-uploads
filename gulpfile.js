@@ -108,6 +108,13 @@ gulp.task("test", function(cb) {
 	//console.log("CMD", cmd); // Debugging
 
 	runCmd(cmd, function(error) {
+
+		if (!error) {
+			console.log("# ");
+			console.log("# Results written to output.txt");
+			console.log("# ");
+		}
+
 		cb(error);
 	});
 
