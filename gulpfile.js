@@ -74,9 +74,13 @@ gulp.task("delete", function(cb) {
 	var cmd = "aws lambda delete-function "
 		+ " --region " + config.aws.region
 		+ " --function-name " + config.aws.function
-		+ " --profile " + config.cli.profile
 		;
-	//console.log("CMD", cmd); // Debugging
+
+	if (config.cli.profile) {
+		cmd += " --profile " + config.cli.profile
+	}
+
+	console.log("CMD", cmd); // Debugging
 
 	console.log("About to delete our function.  Don't worry if this throws an error.");
 
@@ -96,7 +100,6 @@ gulp.task("upload", ["zip", "delete"], function(cb) {
 	var cmd = "aws lambda create-function "
 		+ " --region " + config.aws.region
 		+ " --function-name " + config.aws.function
-		+ " --profile " + config.cli.profile
 		+ " --zip-file fileb://dist/copyFileFromS3.zip "
 		+ " --role " + config.aws.role
 		+ " --handler " + config.aws.function + ".handler "
@@ -104,6 +107,9 @@ gulp.task("upload", ["zip", "delete"], function(cb) {
 		+ " --timeout " + config.aws.timeout
 		+ " --memory-size " + config.aws.memory
 		;
+	if (config.cli.profile) {
+		cmd += " --profile " + config.cli.profile
+	}
 	//console.log("CMD", cmd); // Debugging
 
 	runCmd(cmd, function(error) {
@@ -124,10 +130,12 @@ gulp.task("test", function(cb) {
 		+ " --invocation-type Event "
 		+ " --region " + config.aws.region
 		+ " --function-name " + config.aws.function
-		+ " --profile " + config.cli.profile
 		+ " --payload file://test/input.txt "
 		+ "output.txt"
 		;
+	if (config.cli.profile) {
+		cmd += " --profile " + config.cli.profile
+	}
 	//console.log("CMD", cmd); // Debugging
 
 	runCmd(cmd, function(error) {
@@ -154,13 +162,15 @@ gulp.task("add-permission", ["upload", "remove-permission"], function(cb) {
 	var cmd = "aws lambda add-permission "
 		+ " --region " + config.aws.region
 		+ " --function-name " + config.aws.function
-		+ " --profile " + config.cli.profile
 		+ " --action \"lambda:InvokeFunction\" "
 		+ " --principal s3.amazonaws.com "
 		+ " --statement-id " + config.aws.statement_id
-		+ " --source-arn " + config.aws.source_arn
+		+ " --source-arn arn:aws:s3:::" + config.aws.s3.src
 		+ " --source-account " + config.aws.source_account
 		;
+	if (config.cli.profile) {
+		cmd += " --profile " + config.cli.profile
+	}
 	//console.log("CMD", cmd); // Debugging
 
 	runCmd(cmd, function(error) {
@@ -174,9 +184,11 @@ gulp.task("remove-permission", function(cb) {
 
 	var cmd = "aws lambda remove-permission "
 		+ " --function-name " + config.aws.function
-		+ " --profile " + config.cli.profile
 		+ " --statement-id " + config.aws.statement_id
 		;
+	if (config.cli.profile) {
+		cmd += " --profile " + config.cli.profile
+	}
 	//console.log("CMD", cmd); // Debugging
 
 	runCmd(cmd, function(error) {
@@ -193,8 +205,10 @@ gulp.task("get-policy", function(cb) {
 
 	var cmd = "aws lambda get-policy "
 		+ " --function-name " + config.aws.function
-		+ " --profile " + config.cli.profile
 		;
+	if (config.cli.profile) {
+		cmd += " --profile " + config.cli.profile
+	}
 	//console.log("CMD", cmd); // Debugging
 
 	runCmd(cmd, function(error) {
