@@ -1,0 +1,60 @@
+
+
+#
+# Our AWS CLI options
+#
+cli:
+  #
+  # The credentials profile to run as
+  #
+  profile: FIXME
+
+#
+# AWS settings
+#
+aws:
+
+  region: us-east-1
+
+  #
+  # What is the name of the function?
+  #
+  # The name should only contain letters and number.
+  #
+  function: FIXME
+
+  #
+  # The ARN of the role created in IAM.
+  # It should have the Policy "AWSLambdaExecute" attached.
+  #
+  role: "arn:aws:iam::FIXME:role/FIXME"
+
+  #
+  # Max number of seconds for the script to run?
+  #
+  timeout: 10
+
+  #
+  # Max memory the script can use in MB?
+  #
+  memory: 1024
+
+  #
+  # The unique ID of the statement to give S3 access to execute Lambda
+  #
+  statement_id: FIXME
+
+  #
+  # Our AWS account ID
+  #
+  source_account: FIXME
+
+  #
+  # Our S3 buckets
+  #
+  s3:
+    src: FIXME
+    dest: FIXME
+
+
+
