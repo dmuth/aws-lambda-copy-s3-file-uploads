@@ -56,6 +56,11 @@ gulp.task("go", ["add-permission"], function(cb) {
 });
 
 
+gulp.task("nuke", ["delete", "remove-permission"], function(cb) {
+	cb();
+});
+
+
 //
 // Zip up our code and modules.
 //
