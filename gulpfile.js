@@ -1,9 +1,25 @@
+/**
+* Our Gulpfile containing tasks to run.
+* Major tasks:
+*
+* - get-policy - Retrieve the policy of our function.  Useful for testing.
+* - upload - Create a ZIP archive of the Lambda app and upload it
+* - delete - Delete the Lambda function from AWS
+* - add-permission - Add permission to the S3 bucket to execute this Lambda function
+* - remove-permission - Remove the permission from the S3 bucket
+*
+* - test - Send the contents of test/input.txt into the function in AWS. Results are logged in Cloudwatch.
+*
+* - go - upload, add-permission
+*
+*/
 
-
-var exec = require('child_process').exec;
 
 var gulp = require("gulp");
+var config = require("config");
 var zip = require("gulp-zip");
+
+var exec = require('child_process').exec;
 
 
 /**
@@ -56,16 +72,16 @@ gulp.task("zip", function() {
 gulp.task("delete", function(cb) {
 
 	var cmd = "aws lambda delete-function "
-		+ "--region us-east-1 "
-		+ "--function-name copyFileFromS3 "
-		+ "--profile lambda-test "
+		+ " --region " + config.aws.region
+		+ " --function-name " + config.aws.function
+		+ " --profile " + config.cli.profile
 		;
 	//console.log("CMD", cmd); // Debugging
 
 	console.log("About to delete our function.  Don't worry if this throws an error.");
 
 	runCmd(cmd, function(error) {
-		cb(error);
+		cb();
 	});
 
 
@@ -78,15 +94,15 @@ gulp.task("delete", function(cb) {
 gulp.task("upload", ["zip", "delete"], function(cb) {
 
 	var cmd = "aws lambda create-function "
-		+ "--region us-east-1 "
-		+ "--function-name copyFileFromS3 "
-		+ "--zip-file fileb://dist/copyFileFromS3.zip "
-		+ "--role arn:aws:iam::287061943401:role/lamba-execute "
-		+ "--handler copyFileFromS3.handler "
-		+ "--runtime nodejs4.3 "
-		+ "--profile lambda-test "
-		+ "--timeout 10 "
-		+ "--memory-size 1024"
+		+ " --region " + config.aws.region
+		+ " --function-name " + config.aws.function
+		+ " --profile " + config.cli.profile
+		+ " --zip-file fileb://dist/copyFileFromS3.zip "
+		+ " --role " + config.aws.role
+		+ " --handler " + config.aws.function + ".handler "
+		+ " --runtime nodejs4.3 "
+		+ " --timeout " + config.aws.timeout
+		+ " --memory-size " + config.aws.memory
 		;
 	//console.log("CMD", cmd); // Debugging
 
@@ -104,13 +120,12 @@ gulp.task("upload", ["zip", "delete"], function(cb) {
 gulp.task("test", function(cb) {
 
 	var cmd = "aws lambda invoke "
-		//+ "--invocation-type RequestResponse "
-		+ "--invocation-type Event "
-		+ "--function-name copyFileFromS3 "
-		+ "--region us-east-1 "
-		//+ "--role arn:aws:iam::287061943401:role/lamba-execute "
-		+ "--payload file://test/input.txt "
-		+ "--profile lambda-test "
+		//+ " --invocation-type RequestResponse "
+		+ " --invocation-type Event "
+		+ " --region " + config.aws.region
+		+ " --function-name " + config.aws.function
+		+ " --profile " + config.cli.profile
+		+ " --payload file://test/input.txt "
 		+ "output.txt"
 		;
 	//console.log("CMD", cmd); // Debugging
@@ -131,12 +146,36 @@ gulp.task("test", function(cb) {
 
 
 
+//
+// Allow actions in the source S3 bucket to trigger our Lamba function
+//
+gulp.task("add-permission", ["upload", "remove-permission"], function(cb) {
+
+	var cmd = "aws lambda add-permission "
+		+ " --region " + config.aws.region
+		+ " --function-name " + config.aws.function
+		+ " --profile " + config.cli.profile
+		+ " --action \"lambda:InvokeFunction\" "
+		+ " --principal s3.amazonaws.com "
+		+ " --statement-id " + config.aws.statement_id
+		+ " --source-arn " + config.aws.source_arn
+		+ " --source-account " + config.aws.source_account
+		;
+	//console.log("CMD", cmd); // Debugging
+
+	runCmd(cmd, function(error) {
+		cb(error);
+	});
+
+});
+
+
 gulp.task("remove-permission", function(cb) {
 
 	var cmd = "aws lambda remove-permission "
-		+ "--profile lambda-test "
-		+ "--function-name copyFileFromS3 "
-		+ "--statement-id lambda-permission-s3-test123 "
+		+ " --function-name " + config.aws.function
+		+ " --profile " + config.cli.profile
+		+ " --statement-id " + config.aws.statement_id
 		;
 	//console.log("CMD", cmd); // Debugging
 
@@ -150,35 +189,11 @@ gulp.task("remove-permission", function(cb) {
 //
 // Add permissions to our Lambda function
 //
-gulp.task("add-permission", ["upload", "remove-permission"], function(cb) {
-
-	var cmd = "aws lambda add-permission "
-		+ "--function-name copyFileFromS3 "
-		+ "--region us-east-1 "
-		+ "--statement-id lambda-permission-s3-test123 "
-		+ "--action \"lambda:InvokeFunction\" "
-		+ "--principal s3.amazonaws.com "
-		+ "--source-arn arn:aws:s3:::dmuth-test-src "
-		+ "--source-account 287061943401 "
-		+ "--profile lambda-test "
-		;
-	//console.log("CMD", cmd); // Debugging
-
-	runCmd(cmd, function(error) {
-		cb(error);
-	});
-
-});
-
-
-//
-// Add permissions to our Lambda function
-//
 gulp.task("get-policy", function(cb) {
 
 	var cmd = "aws lambda get-policy "
-		+ "--function-name copyFileFromS3 "
-		+ "--profile lambda-test "
+		+ " --function-name " + config.aws.function
+		+ " --profile " + config.cli.profile
 		;
 	//console.log("CMD", cmd); // Debugging
 
