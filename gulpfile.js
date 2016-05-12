@@ -14,11 +14,11 @@ function runCmd(cmd, cb) {
 	exec(cmd, function (error, stdout, stderr) {
 
 		if (stdout) {
-			console.log(stdout);
+			console.log("Stdout:", stdout);
 		}
 
 		if (stderr) {
-			console.log(stderr);
+			console.log("Stderr:", stderr);
 		}
 
 		if (error) {
@@ -30,6 +30,14 @@ function runCmd(cmd, cb) {
 	});
 
 } // End of runCmd()
+
+
+//
+// Top level task to run everything else
+//
+gulp.task("go", ["add-permission"], function(cb) {
+	cb();
+});
 
 
 //
@@ -142,7 +150,7 @@ gulp.task("remove-permission", function(cb) {
 //
 // Add permissions to our Lambda function
 //
-gulp.task("add-permission", ["remove-permission"], function(cb) {
+gulp.task("add-permission", ["upload", "remove-permission"], function(cb) {
 
 	var cmd = "aws lambda add-permission "
 		+ "--function-name copyFileFromS3 "
