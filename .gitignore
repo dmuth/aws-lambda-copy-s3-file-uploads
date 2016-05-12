@@ -12,3 +12,10 @@ dist/
 #
 output.txt
 
+#
+# Don't index our default config with user-specific bucket names and such
+#
+config/default.yaml
+
+
+
