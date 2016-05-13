@@ -16,6 +16,7 @@
 
 
 var gulp = require("gulp");
+
 var config = require("config");
 var zip = require("gulp-zip");
 
@@ -27,6 +28,7 @@ var exec = require('child_process').exec;
 */
 function runCmd(cmd, cb) {
 
+	//console.log("CMD", cmd);
 	exec(cmd, function (error, stdout, stderr) {
 
 		if (stdout) {
@@ -66,7 +68,7 @@ gulp.task("nuke", ["delete", "remove-permission"], function(cb) {
 //
 gulp.task("zip", function() {
 	return(
-		gulp.src(["copyFileFromS3.js", "node_modules/**/*"])
+		gulp.src(["copyFileFromS3.js", "node_modules/**/*", "config/**/*"])
 			.pipe(zip("copyFileFromS3.zip"))
 			.pipe(gulp.dest("dist"))
 		);
@@ -84,8 +86,6 @@ gulp.task("delete", function(cb) {
 	if (config.cli.profile) {
 		cmd += " --profile " + config.cli.profile
 	}
-
-	console.log("CMD", cmd); // Debugging
 
 	console.log("About to delete our function.  Don't worry if this throws an error.");
 
@@ -115,7 +115,6 @@ gulp.task("upload", ["zip", "delete"], function(cb) {
 	if (config.cli.profile) {
 		cmd += " --profile " + config.cli.profile
 	}
-	//console.log("CMD", cmd); // Debugging
 
 	runCmd(cmd, function(error) {
 		cb(error);
@@ -141,7 +140,6 @@ gulp.task("test", function(cb) {
 	if (config.cli.profile) {
 		cmd += " --profile " + config.cli.profile
 	}
-	//console.log("CMD", cmd); // Debugging
 
 	runCmd(cmd, function(error) {
 
@@ -176,7 +174,6 @@ gulp.task("add-permission", ["upload", "remove-permission"], function(cb) {
 	if (config.cli.profile) {
 		cmd += " --profile " + config.cli.profile
 	}
-	//console.log("CMD", cmd); // Debugging
 
 	runCmd(cmd, function(error) {
 		cb(error);
@@ -194,7 +191,6 @@ gulp.task("remove-permission", function(cb) {
 	if (config.cli.profile) {
 		cmd += " --profile " + config.cli.profile
 	}
-	//console.log("CMD", cmd); // Debugging
 
 	runCmd(cmd, function(error) {
 		cb();
@@ -214,7 +210,6 @@ gulp.task("get-policy", function(cb) {
 	if (config.cli.profile) {
 		cmd += " --profile " + config.cli.profile
 	}
-	//console.log("CMD", cmd); // Debugging
 
 	runCmd(cmd, function(error) {
 		cb(error);
