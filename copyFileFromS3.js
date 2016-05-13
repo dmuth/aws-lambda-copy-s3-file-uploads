@@ -5,22 +5,29 @@
 //
 // Load our required modules
 //
-var async = require('async');
-var AWS = require('aws-sdk');
-var util = require('util');
+var async = require("async");
+var AWS = require("aws-sdk");
+
+process.env.NODE_CONFIG_DIR = process.env["LAMBDA_TASK_ROOT"];
+var config = require("config");
+
+var util = require("util");
 
 
+//
 // Create our S3 client. No credentials will be necessary as this code will run under a role.
+//
 var s3 = new AWS.S3();
  
 
 exports.handler = function(event, context, cb) {
 
-	console.log(util.inspect(event, {depth: 5}));
+	console.log("Event data: " + util.inspect(event, {depth: 5}));
     
 	var srcBucket = event.Records[0].s3.bucket.name;
 	var srcKey    = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, " "));  
-	var dstBucket = "dmuth-test-dest";
+	//var dstBucket = "dmuth-test-dest";
+	var dstBucket = config.aws.s3.dest;
 	var dstKey    = srcKey;
 
 	if (srcBucket == dstBucket) {
