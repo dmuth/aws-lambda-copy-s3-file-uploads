@@ -69,10 +69,10 @@ exports.handler = function(event, context, cb) {
 	], function (error) {
 
 		if (error) {
-			console.error(util.format("Unable to copy %s to %s. Error: %s", src, dest, error));
+			console.error(util.format("ERROR: Unable to copy %s to %s. Error: %s", src, dest, error));
 
 		} else {
-			console.log(util.format("Successfully copied %s to %s", src, dest));
+			console.log(util.format("OK: Successfully copied %s to %s", src, dest));
 
 		}
 
