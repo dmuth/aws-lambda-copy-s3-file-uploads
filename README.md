@@ -27,7 +27,21 @@ have write access to is backed up, in case one of those processes (or people) ru
 -- Your AWS acount ID
 -- Your source and destination buckets
 - Run `gulp go` to create the ZIP File containing the function, upload it, and set permissions on the function.
+- Go into the Lamba function on the control panel and click the "Events" tab. Add an "Object Created" source for the bucket you want to replicate. (There doesn't seem to be a way to do this on the command line.  If someone knows, please tell me!)
 
+
+## Testing
+
+You should be able to copy a file into your source bucket, and it will show up in the destination bucket.
+
+
+## Troubleshooting
+
+The first thing you can try checking if files aren't showing up are the Cloudwatch logs for that function.
+Since this is asynchronous, it can sometimes take a few seconds for the file to be copied.
+
+The next thing you can try is to run `gulp test`, which will run the Lamba function with a test event
+stored in `test/input.txt`.  Note that you will need to change the source bucket and filename first.
 
 
 ## FAQ
