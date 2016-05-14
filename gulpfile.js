@@ -107,7 +107,7 @@ gulp.task("upload", ["zip", "delete"], function(cb) {
 		+ " --function-name " + config.aws.function
 		+ " --zip-file fileb://dist/copyFileFromS3.zip "
 		+ " --role " + config.aws.role
-		+ " --handler " + config.aws.function + ".handler "
+		+ " --handler " + "copyFileFromS3" + ".handler "
 		+ " --runtime nodejs4.3 "
 		+ " --timeout " + config.aws.timeout
 		+ " --memory-size " + config.aws.memory
