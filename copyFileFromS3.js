@@ -26,7 +26,6 @@ exports.handler = function(event, context, cb) {
     
 	var srcBucket = event.Records[0].s3.bucket.name;
 	var srcKey    = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, " "));  
-	//var dstBucket = "dmuth-test-dest";
 	var dstBucket = config.aws.s3.dest;
 	var dstKey    = srcKey;
 
