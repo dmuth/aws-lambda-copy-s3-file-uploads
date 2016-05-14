@@ -1,9 +1,42 @@
 
+
+# copyFileFromS3.js
+
+This is an AWS Lambda function which when fired with an S3 ObjectCreated event, will copy the file
+from the bucket it was created in to a target bucket.
+
+**Suggested uses:** Useful for making sure that the contents of a bucket which many people/processes
+have write access to is backed up, in case one of those processes (or people) runs amok.
+
+
+
 ## Prequistites
 
 - The `awscli` CLI utility: http://docs.aws.amazon.com/cli/latest/userguide/installing.html
 	- Make sure it is configured with AWS credentials
-- A role created in IAM with the "AWSLambdaExecute" policy
+- Make sure <a href="http://gulpjs.com/">Gulp</a> is installed.
+
+
+## Setup
+
+- Create your source and target buckets in AWS.
+- Create a role in IAM with the "AWSLmabdaExecute" policy, and note the ARN.
+- Copy `config/default.yaml-sample` to `config/default.yaml`, and edit the file to include
+-- The credentials profile you are using in the AWS CLI
+-- The ARN of the role you just created
+-- Your AWS acount ID
+-- Your source and destination buckets
+- Run `gulp go` to create the ZIP File containing the function, upload it, and set permissions on the function.
+
+
+
+## FAQ
+
+Q: Why is the node_modules/ directory present?
+
+A: Because I'm a fan of <a href="https://reproducible-builds.org/">Reproducible Builds</a>. While this isn't 
+strictly "compiling" software, I believe that people should be able to clone this repository and run
+the exact same code which I have on my dev machine at home.
 
 
 
