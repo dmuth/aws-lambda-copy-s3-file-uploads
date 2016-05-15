@@ -23,7 +23,7 @@ var s3 = new AWS.S3();
 /**
 * Read our source file and write it to a new bucket.
 */
-function copyFile(srcBucket, srcKey, dstBucket, dstKey, cb) {
+function copyFileInRAM(srcBucket, srcKey, dstBucket, dstKey, cb) {
 
 	async.waterfall([
 		function download(cb2) {
@@ -56,8 +56,7 @@ function copyFile(srcBucket, srcKey, dstBucket, dstKey, cb) {
 
 		});
 
-} // End of copyFile()
-
+} // End of copyFileInRAM()
 
 
 exports.handler = function(event, context, cb) {
@@ -85,7 +84,7 @@ exports.handler = function(event, context, cb) {
 	async.waterfall([
 
 		function(cb2) {
-			copyFile(srcBucket, srcKey, dstBucket, dstKey, cb2);
+			copyFileInRAM(srcBucket, srcKey, dstBucket, dstKey, cb2);
 		},
 
 	], function (error) {
