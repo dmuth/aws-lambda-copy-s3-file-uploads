@@ -59,6 +59,36 @@ function copyFileInRAM(srcBucket, srcKey, dstBucket, dstKey, cb) {
 } // End of copyFileInRAM()
 
 
+/**
+* Copy the file using the API endpoint instead.
+* This should consume much less RAM than reading the entire file into RAM.
+*
+*/
+function copyFileInAPI(srcBucket, srcKey, dstBucket, dstKey, cb) {
+
+	async.waterfall([
+		function(cb2) {
+			var params = {};
+			params.CopySource = srcBucket + "/" + srcKey;
+			params.Bucket = dstBucket;
+			params.Key = dstKey;
+
+			s3.copyObject(params, cb2);
+
+		},
+		],
+
+		function(error) {
+			cb(error);
+
+		}
+
+		);
+
+
+} // End of copyFileInAPI()
+
+
 exports.handler = function(event, context, cb) {
 
 	console.log("Event data: " + util.inspect(event, {depth: 5}));
@@ -84,7 +114,8 @@ exports.handler = function(event, context, cb) {
 	async.waterfall([
 
 		function(cb2) {
-			copyFileInRAM(srcBucket, srcKey, dstBucket, dstKey, cb2);
+			//copyFileInRAM(srcBucket, srcKey, dstBucket, dstKey, cb2);
+			copyFileInAPI(srcBucket, srcKey, dstBucket, dstKey, cb2);
 		},
 
 	], function (error) {
