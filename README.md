@@ -15,7 +15,7 @@ have write access to is backed up, in case one of those processes (or people) ru
 
 - The `awscli` CLI utility: http://docs.aws.amazon.com/cli/latest/userguide/installing.html
 	- Make sure it is configured with AWS credentials
-- Make sure <a href="http://nodejs.org/">Node.js</a> and <a href="http://gulpjs.com/">Gulp</a> is installed.
+- Make sure <a href="http://nodejs.org/">Node.js</a> and <a href="http://gulpjs.com/">Gulp</a> are installed.
 
 
 ## Setup
