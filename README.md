@@ -20,7 +20,9 @@ have write access to is backed up, in case one of those processes (or people) ru
 ## Setup
 
 - Create your source and target buckets in AWS.
-- Create a role in IAM with the "AWSLmabdaExecute" policy, and note the ARN.
+- Create a role in IAM with the "AWSLmabdaExecute" policy, then add the "s3:CopyObject" permission.
+-- ...or, just use <a href="#policy">the sample IAM policy below</a>.
+-- **Note the ARN of the role**
 - Copy `config/default.yaml-sample` to `config/default.yaml`, and edit the file to include
 -- The credentials profile you are using in the AWS CLI
 -- The ARN of the role you just created
@@ -42,6 +44,37 @@ Since this is asynchronous, it can sometimes take a few seconds for the file to 
 
 The next thing you can try is to run `gulp test`, which will run the Lamba function with a test event
 stored in `test/input.txt`.  Note that you will need to change the source bucket and filename first.
+
+
+<a name="policy"></a>
+## Sample IAM Policy
+
+Here's a sample IAM policy that will allow Lambda functions to read from S3 and copy objects within it:
+
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:*"
+            ],
+            "Resource": "arn:aws:logs:*:*:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:CopyObject"
+            ],
+            "Resource": "arn:aws:s3:::*"
+        }
+    ]
+}
+```
 
 
 ## FAQ
