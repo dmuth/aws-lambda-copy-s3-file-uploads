@@ -1,6 +1,6 @@
 
 
-# copyFileFromS3.js
+# Copy S3 File Uploads
 
 This is an AWS Lambda function which when fired with an S3 ObjectCreated event, will copy the file
 from the bucket it was created in to a target bucket.
