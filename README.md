@@ -3,7 +3,7 @@
 
 # Copy S3 File Uploads
 
-This is an AWS Lambda function which when fired with an S3 ObjectCreated event, will copy the file
+This is an AWS Lambda function which when fired with an S3 ObjectCreated event, will automatically copy the file
 from the bucket it was created in to a target bucket.
 
 **Suggested uses:** Useful for making sure that the contents of a bucket which many people/processes
