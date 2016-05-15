@@ -22,13 +22,13 @@ have write access to is backed up, in case one of those processes (or people) ru
 
 - Create your source and target buckets in AWS.
 - Create a role in IAM with the "AWSLmabdaExecute" policy, then add the "s3:CopyObject" permission.
--- ...or, just use <a href="#policy">the sample IAM policy below</a>.
--- **Note the ARN of the role**
+   - ...or, just use <a href="#policy">the sample IAM policy below</a>.
+   - **Note the ARN of the role**
 - Copy `config/default.yaml-sample` to `config/default.yaml`, and edit the file to include
--- The credentials profile you are using in the AWS CLI
--- The ARN of the role you just created
--- Your AWS acount ID
--- Your source and destination buckets
+   - The credentials profile you are using in the AWS CLI
+   - The ARN of the role you just created
+   - Your AWS acount ID
+   - Your source and destination buckets
 - Run `gulp go` to create the ZIP File containing the function, upload it, and set permissions on the function.
 - Go into the Lamba function on the control panel and click the "Events" tab. Add an "Object Created" source for the bucket you want to replicate. (There doesn't seem to be a way to do this on the command line.  If someone knows, please tell me!)
 
