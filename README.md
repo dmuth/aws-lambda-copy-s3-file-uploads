@@ -50,7 +50,8 @@ Q: Why is the node_modules/ directory present?
 
 A: Because I'm a fan of <a href="https://reproducible-builds.org/">Reproducible Builds</a>. While this isn't 
 strictly "compiling" software, I believe that people should be able to clone this repository and run
-the exact same code which I have on my dev machine at home.
+the exact same code which I have on my dev machine at home.  It can prevent a whole series of bugs where an 
+underlying module is updated and introduces (or fixes) a bug, causing the calling code to behave differently.
 
 
 
