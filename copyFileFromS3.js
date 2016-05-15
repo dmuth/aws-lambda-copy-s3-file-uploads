@@ -21,7 +21,7 @@ var s3 = new AWS.S3();
 
 
 /**
-* Read our source file and 
+* Read our source file and write it to a new bucket.
 */
 function copyFile(srcBucket, srcKey, dstBucket, dstKey, cb) {
 
