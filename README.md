@@ -1,4 +1,5 @@
 
+<img src="img/aws-lambda-banner.png" width="300" style="float: right; "/>
 
 # Copy S3 File Uploads
 
