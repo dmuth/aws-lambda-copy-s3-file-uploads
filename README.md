@@ -88,4 +88,17 @@ underlying module is updated and introduces (or fixes) a bug, causing the callin
 
 
 
+## Reporting Bugs and Contacting Me
+
+Feel free to <a href="https://github.com/dmuth/aws-lamba-copy-s3-file-uploads/issues/new"
+	>file an issue</a>.  A few other ways to get in touch with me:
+
+- Email: dmuth AT dmuth DOT org, doug.muth AT gmail dot com
+- Twitter: <a href="http://twitter.com/dmuth">@dmuth</a>
+- <a href="http://www.facebook.com/dmuth">Facebook</a>
+
+
+Is this code is useful for your project, do let me know!
+
+
 
