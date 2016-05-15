@@ -18,7 +18,47 @@ var util = require("util");
 // Create our S3 client. No credentials will be necessary as this code will run under a role.
 //
 var s3 = new AWS.S3();
- 
+
+
+/**
+* Read our source file and 
+*/
+function copyFile(srcBucket, srcKey, dstBucket, dstKey, cb) {
+
+	async.waterfall([
+		function download(cb2) {
+
+			console.log("About to copy source: " + srcBucket + "/" + srcKey);
+
+			s3.getObject({
+				Bucket: srcBucket,
+				Key: srcKey
+				}, cb2);
+
+		},
+
+		function upload(response, cb2) {
+
+			console.log("Successfully grabbed source file! About to write dest file: " 
+				+ dstBucket + "/" + dstKey);
+
+			s3.putObject({
+				Bucket: dstBucket,
+				Key: dstKey,
+				Body: response.Body,
+				ContentType: response.ContentType
+			}, cb2);
+
+		}
+		],
+		function(error) {
+			cb(error);
+
+		});
+
+} // End of copyFile()
+
+
 
 exports.handler = function(event, context, cb) {
 
@@ -28,6 +68,7 @@ exports.handler = function(event, context, cb) {
 	var srcKey    = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, " "));  
 	var dstBucket = config.aws.s3.dest;
 	var dstKey    = srcKey;
+	//var dstKey    = srcKey + "-" + new Date().getTime(); // Debugging
 
 	if (srcBucket == dstBucket) {
 		cb("Source and destination buckets are the same.");
@@ -39,32 +80,13 @@ exports.handler = function(event, context, cb) {
 	//
 	var src = srcBucket + "/" + srcKey;
 	var dest = dstBucket + "/" + dstKey;
+	console.log(util.format("About to copy file '%s' to '%s'", src, dest));
 
 	async.waterfall([
 
-		function download(cb2) {
-
-			console.log("About to copy source file:", src);
-
-			s3.getObject({
-				Bucket: srcBucket,
-				Key: srcKey
-				}, cb2);
-
+		function(cb2) {
+			copyFile(srcBucket, srcKey, dstBucket, dstKey, cb2);
 		},
-
-		function upload(response, cb2) {
-
-			console.log("Successfully grabbed source file! About to write dest file:", dest);
-
-			s3.putObject({
-				Bucket: dstBucket,
-				Key: dstKey,
-				Body: response.Body,
-				ContentType: response.ContentType
-			}, cb2);
-
-		}
 
 	], function (error) {
 
