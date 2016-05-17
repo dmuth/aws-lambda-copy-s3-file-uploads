@@ -24,6 +24,7 @@ have write access to is backed up, in case one of those processes (or people) ru
 - Create a role in IAM with the "AWSLmabdaExecute" policy, then add the "s3:CopyObject" permission.
    - ...or, just use <a href="#policy">the sample IAM policy below</a>.
    - **Note the ARN of the role**
+- Make sure the AWS Account ID of the account you'll be using has the `AWSLambdaFullAccess` policy attached.
 - Copy `config/default.yaml-sample` to `config/default.yaml`, and edit the file to include
    - The credentials profile you are using in the AWS CLI
    - The ARN of the role you just created
