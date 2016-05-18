@@ -89,6 +89,10 @@ the exact same code which I have on my dev machine at home.  It can prevent a wh
 underlying module is updated and introduces (or fixes) a bug, causing the calling code to behave differently.
 
 
+## Known Issues
+
+- It appears that events from an S3 bucket can only be sent to one source.  If you run the Gulp jobs successfully and nothing shows up in the function's "Event Sources" tab, events from the bucket may be being sent elsewhere.  I'm still not sure what's going on here, but you may need to go into the S3 Bucket settings, delete the events from there, and add them in Lambda.  If you want events going to multiple destinations, you'll probably need to use SNS.
+
 
 ## Reporting Bugs and Contacting Me
 
